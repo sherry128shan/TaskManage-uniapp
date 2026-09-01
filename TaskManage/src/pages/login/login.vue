@@ -20,18 +20,23 @@ onMounted(() => {
 function validate() {
   error.value = ''
   if (!username.value.trim() || !password.value) {
-    error.value = 'Enter a username and password to continue.'
+    error.value = '请输入用户名和密码。'
     return false
   }
   if (password.value.length < 6) {
-    error.value = 'Use at least 6 characters for your password.'
+    error.value = '密码至少需要 6 个字符。'
     return false
   }
   if (isRegister.value && password.value !== confirmPassword.value) {
-    error.value = 'The passwords do not match.'
+    error.value = '两次输入的密码不一致。'
     return false
   }
   return true
+}
+
+function enterGuest() {
+  auth.continueAsGuest()
+  uni.reLaunch({ url: '/pages/tasks/tasks' })
 }
 
 async function submit() {
@@ -49,7 +54,7 @@ async function submit() {
     mode.value = 'login'
     password.value = ''
     confirmPassword.value = ''
-    error.value = 'Account created. Sign in to continue.'
+    error.value = '账号已创建，请登录继续。'
     return
   }
   uni.reLaunch({ url: '/pages/tasks/tasks' })
@@ -62,31 +67,32 @@ async function submit() {
     <view class="auth-orbit orbit-two" />
     <view class="auth-content">
       <view class="brand-mark">TM</view>
-      <text class="eyebrow">A quieter way to get things done</text>
-      <text class="auth-title">{{ isRegister ? 'Make space for what matters.' : 'Welcome back.' }}</text>
-      <text class="auth-subtitle">Keep tasks, reminders and small daily tools close at hand.</text>
+      <text class="eyebrow">TASKMANAGE · 学生任务执行中心</text>
+      <text class="auth-title">{{ isRegister ? '为重要的事留出空间。' : '先记住，再一步步完成。' }}</text>
+      <text class="auth-subtitle">把课程、作业和个人计划放在一个安静清楚的入口里。</text>
 
       <view class="auth-form">
         <view class="field-group">
-          <text class="field-label">Username</text>
-          <input v-model="username" class="field-input" placeholder="you@example.com" placeholder-class="field-placeholder" maxlength="80" />
+          <text class="field-label">用户名</text>
+          <input v-model="username" class="field-input" placeholder="输入用户名或邮箱" placeholder-class="field-placeholder" maxlength="80" />
         </view>
         <view class="field-group">
-          <text class="field-label">Password</text>
-          <input v-model="password" class="field-input" password placeholder="At least 6 characters" placeholder-class="field-placeholder" maxlength="64" @confirm="submit" />
+          <text class="field-label">密码</text>
+          <input v-model="password" class="field-input" password placeholder="至少 6 个字符" placeholder-class="field-placeholder" maxlength="64" @confirm="submit" />
         </view>
         <view v-if="isRegister" class="field-group">
-          <text class="field-label">Confirm password</text>
-          <input v-model="confirmPassword" class="field-input" password placeholder="Type it once more" placeholder-class="field-placeholder" @confirm="submit" />
+          <text class="field-label">确认密码</text>
+          <input v-model="confirmPassword" class="field-input" password placeholder="再输入一次密码" placeholder-class="field-placeholder" @confirm="submit" />
         </view>
-        <text v-if="error" class="form-message" :class="{ success: error.startsWith('Account') }">{{ error }}</text>
-        <button class="primary-button" :disabled="busy" @tap="submit">{{ busy ? 'Working…' : (isRegister ? 'Create account' : 'Sign in') }}</button>
+        <text v-if="error" class="form-message" :class="{ success: error.startsWith('账号') }">{{ error }}</text>
+        <button class="primary-button" :disabled="busy" @tap="submit">{{ busy ? '处理中…' : (isRegister ? '创建本地账号' : '登录') }}</button>
       </view>
 
       <button class="text-button" @tap="mode = isRegister ? 'login' : 'register'">
-        {{ isRegister ? 'Already have an account? Sign in' : 'New here? Create a local account' }}
+        {{ isRegister ? '已有账号？返回登录' : '已有账号之外，创建本地账号' }}
       </button>
-      <text class="prototype-note">Local prototype · your data stays on this device</text>
+      <button class="guest-button" @tap="enterGuest">直接体验，不必先登录</button>
+      <text class="prototype-note">本地体验 · 数据保存在此设备</text>
     </view>
   </view>
 </template>
@@ -213,6 +219,19 @@ async function submit() {
   color: #477269;
   font-size: 26rpx;
   line-height: 1.5;
+}
+
+.guest-button {
+  width: 100%;
+  height: 84rpx;
+  margin-top: 14rpx;
+  padding: 0;
+  border: 2rpx solid #b8d1be;
+  border-radius: 22rpx;
+  background: transparent;
+  color: #36564d;
+  font-size: 27rpx;
+  line-height: 80rpx;
 }
 
 .prototype-note {

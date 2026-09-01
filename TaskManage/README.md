@@ -2,6 +2,10 @@
 
 TaskManage is the cross-platform Vue 3 migration of the original Android TaskMate project. The Java app remains in the parent directory as a behaviour reference; this folder is the new uni-app application.
 
+## Product documentation
+
+- [Student task execution center PRD](docs/PRD-学生任务执行中心.md)
+
 ## Stack
 
 - uni-app (Vue 3)

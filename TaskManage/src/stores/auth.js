@@ -16,16 +16,21 @@ export const useAuthStore = defineStore('auth', () => {
     hydrated.value = true
   }
 
-  function persistSession(nextUser) {
+function persistSession(nextUser) {
     user.value = nextUser
     writeStorage(SESSION_KEY, nextUser)
-  }
+}
+
+function continueAsGuest() {
+  persistSession({ id: createId('guest'), username: '本地体验', guest: true })
+  return { ok: true }
+}
 
   function register(username, password) {
     const cleanUsername = username.trim().toLowerCase()
     const users = readStorage(USERS_KEY, [])
     if (users.some((item) => item.username === cleanUsername)) {
-      return { ok: false, message: 'This account already exists.' }
+      return { ok: false, message: '这个账号已经存在。' }
     }
     // Local-only prototype: replace this with a server-side auth flow before release.
     const record = { id: createId('user'), username: cleanUsername, password }
@@ -38,7 +43,7 @@ export const useAuthStore = defineStore('auth', () => {
     const record = readStorage(USERS_KEY, []).find(
       (item) => item.username === cleanUsername && item.password === password
     )
-    if (!record) return { ok: false, message: 'Check your username and password.' }
+    if (!record) return { ok: false, message: '请检查用户名和密码。' }
     persistSession({ id: record.id, username: record.username })
     return { ok: true }
   }
@@ -48,5 +53,5 @@ export const useAuthStore = defineStore('auth', () => {
     removeStorage(SESSION_KEY)
   }
 
-  return { user, hydrated, isLoggedIn, hydrate, register, login, logout }
+  return { user, hydrated, isLoggedIn, hydrate, continueAsGuest, register, login, logout }
 })

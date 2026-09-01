@@ -1,5 +1,17 @@
 page {
-  background: #f6f4ee;
+  --tm-bg: #f6f4ee;
+  --tm-surface: #ffffff;
+  --tm-primary: #183b32;
+  --tm-secondary: #477269;
+  --tm-muted: #6c7d75;
+  --tm-border: #e4e7dd;
+  --tm-success: #477269;
+  --tm-warning: #8c6a4a;
+  --tm-danger: #a34c42;
+}
+
+page {
+  background: var(--tm-bg);
   color: #1d2a25;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 28rpx;

@@ -17,7 +17,6 @@
     "distribute": {
       "android": {
         "permissions": [
-          "android.permission.CAMERA",
           "android.permission.VIBRATE",
           "android.permission.POST_NOTIFICATIONS"
         ]
